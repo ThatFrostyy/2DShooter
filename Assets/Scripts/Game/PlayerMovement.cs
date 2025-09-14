@@ -89,6 +89,13 @@ public class PlayerController : MonoBehaviour
         rb.MoveRotation(newAngle);
     }
 
+    #region Upgrades
+    public void IncreaseSpeed(float amount)
+    {
+        maxSpeed += amount;
+    }
+    #endregion Upgrades
+
     private void OnDrawGizmos()
     {
         if (Application.isPlaying && rb != null)

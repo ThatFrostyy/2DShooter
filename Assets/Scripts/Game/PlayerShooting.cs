@@ -4,7 +4,7 @@ public class PlayerShooting : MonoBehaviour
 {
     [Header("Shooting Configuration")]
     public WeaponData currentWeapon;
-    public int projectilePoolSize = 20;
+    public int projectilePoolSize = 15;
 
     [Header("Object References")]
     public Transform firePoint;
@@ -44,7 +44,7 @@ public class PlayerShooting : MonoBehaviour
 
     private void Update()
     {
-        // Full-Auto logic: fires continuously while the button is held
+        // Full-Auto logic
         if (currentWeapon.fireMode == WeaponData.FireMode.FullAuto && isFiring)
         {
             Fire();
@@ -86,7 +86,6 @@ public class PlayerShooting : MonoBehaviour
             projectileObject.transform.localScale = currentWeapon.projectileData.scale;
         }
 
-        // Use the pooler to efficiently spawn the effect
         ObjectPooler.Instance.SpawnFromPool(currentWeapon.shootEffectPrefab, firePoint.transform.position, Quaternion.identity);
 
         if (AudioManager.Instance != null)
@@ -94,4 +93,19 @@ public class PlayerShooting : MonoBehaviour
             AudioManager.Instance.PlaySfx(currentWeapon.shootSound);
         }
     }
+
+    #region Upgrades
+    public void IncreaseFireRate(float amount)
+    {
+        if (currentWeapon != null)
+        {
+            currentWeapon.fireRate += amount;
+        }
+    }
+
+    public void ChangeWeapon(WeaponData newWeapon)
+    {
+        currentWeapon = newWeapon;
+    }
+    #endregion Upgrades
 }

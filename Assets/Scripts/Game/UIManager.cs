@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic; 
 
 public class UIManager : MonoBehaviour
 {
@@ -12,7 +13,11 @@ public class UIManager : MonoBehaviour
 
     [Header("Game Over Screen")]
     public GameObject gameOverPanel; 
-    public TextMeshProUGUI finalScoreText; 
+    public TextMeshProUGUI finalScoreText;
+
+    [Header("Card Selection Screen")]
+    public GameObject cardSelectionPanel;
+    public CardUI[] cardSlots;
 
     private void Awake()
     {
@@ -26,12 +31,56 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnScoreChanged += UpdateScore;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnScoreChanged -= UpdateScore;
+        }
+    }
+
     private void Start()
     {
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(false);
         }
+
+        if (cardSelectionPanel != null)
+        {
+            cardSelectionPanel.SetActive(false);
+        }
+    }
+
+    public void ShowCardSelection(List<CardData> cards)
+    {
+        cardSelectionPanel.SetActive(true);
+        for (int i = 0; i < cardSlots.Length; i++)
+        {
+            if (i < cards.Count)
+            {
+                cardSlots[i].gameObject.SetActive(true);
+                cardSlots[i].Display(cards[i]);
+            }
+            else
+            {
+                // Hide extra slots if you were given less than 3 cards
+                cardSlots[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public void HideCardSelection()
+    {
+        cardSelectionPanel.SetActive(false);
     }
 
     public void UpdateScore(int newScore)

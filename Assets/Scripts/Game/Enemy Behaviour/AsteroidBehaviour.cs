@@ -21,16 +21,18 @@ public class AsteroidBehavior : MonoBehaviour, IEnemyBehavior
     {
         this.moveSpeed = data.moveSpeed;
         this.lifetime = data.lifetime;
+        this.lifetimeTimer = 0f;
 
-        playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
-
-        if (playerTransform != null)
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject != null)
         {
+            playerTransform = playerObject.transform;
+
             // Aim at a random point in a 5-unit radius circle around the player
             Vector3 targetPoint = playerTransform.position + (Vector3)Random.insideUnitCircle * 5f;
             moveDirection = (targetPoint - transform.position).normalized;
         }
-        else 
+        else
         {
             // Aim towards the center of the screen (0,0,0)
             moveDirection = (Vector3.zero - transform.position).normalized;
@@ -44,7 +46,7 @@ public class AsteroidBehavior : MonoBehaviour, IEnemyBehavior
         lifetimeTimer += Time.deltaTime;
         if (lifetimeTimer >= lifetime)
         {
-            gameObject.SetActive(false);
+            ObjectPooler.Instance.ReturnToPool(gameObject);
         }
     }
 

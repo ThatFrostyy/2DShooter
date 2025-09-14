@@ -48,9 +48,10 @@ public class PlayerBounds : MonoBehaviour
         spriteWidthExtent = spriteBounds.extents.x;
         spriteHeightExtent = spriteBounds.extents.y;
 
-        // Convert the camera's viewport corners (0,0 and 1,1) to world coordinates
-        Vector3 lowerLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, 0));
-        Vector3 upperRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 1, 0));
+        float zDistance = Mathf.Abs(mainCamera.transform.position.z);
+
+        Vector3 lowerLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, zDistance));
+        Vector3 upperRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 1, zDistance));
 
         minX = lowerLeft.x;
         maxX = upperRight.x;

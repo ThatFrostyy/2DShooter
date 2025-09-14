@@ -53,7 +53,7 @@ public class Projectile : MonoBehaviour
 
         HandleImpact();
 
-        gameObject.SetActive(false);
+        ObjectPooler.Instance.ReturnToPool(gameObject);
     }
 
     private void HandleImpact()

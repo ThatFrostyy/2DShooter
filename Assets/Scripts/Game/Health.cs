@@ -94,6 +94,7 @@ public class Health : MonoBehaviour
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.PlayerDied();
+                gameObject.SetActive(false);
             }
         }
         else if (gameObject.CompareTag("Enemy"))
@@ -101,9 +102,22 @@ public class Health : MonoBehaviour
             if (enemyComponent != null && enemyComponent.enemyData != null && GameManager.Instance != null)
             {
                 GameManager.Instance.AddScore(enemyComponent.enemyData.scoreValue);
+                ObjectPooler.Instance.ReturnToPool(gameObject);
+
             }
         }
-
-        gameObject.SetActive(false);
     }
+
+    #region Upgrades
+    public void IncreaseMaxHealth(float amount)
+    {
+        maxHealth += amount;
+        currentHealth += amount; 
+
+        if (isPlayerHealth && UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateHealth(currentHealth, maxHealth);
+        }
+    }
+    #endregion Upgrades
 }
